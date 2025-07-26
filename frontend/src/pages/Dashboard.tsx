@@ -274,7 +274,7 @@ const Dashboard: React.FC = () => {
                     {invoice.invoiceNumber}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {invoice.customerName}
+                    {invoice.partyName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(invoice.date).toLocaleDateString()}
