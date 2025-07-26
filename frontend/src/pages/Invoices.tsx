@@ -48,7 +48,7 @@ const Invoices: React.FC = () => {
 
   const filteredInvoices = invoices.filter(invoice => {
     const matchesSearch = invoice.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         invoice.customerName.toLowerCase().includes(searchTerm.toLowerCase());
+                         invoice.partyName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || invoice.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -159,7 +159,7 @@ const Invoices: React.FC = () => {
                     Invoice #
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
+                    Party
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
@@ -186,9 +186,9 @@ const Invoices: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{invoice.customerName}</div>
-                        {invoice.customerEmail && (
-                          <div className="text-sm text-gray-500">{invoice.customerEmail}</div>
+                        <div className="text-sm font-medium text-gray-900">{invoice.partyName}</div>
+                        {invoice.partyEmail && (
+                          <div className="text-sm text-gray-500">{invoice.partyEmail}</div>
                         )}
                       </div>
                     </td>

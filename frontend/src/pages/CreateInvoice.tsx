@@ -10,20 +10,20 @@ import {
   User,
   Package
 } from 'lucide-react';
-import { Invoice, InvoiceItem, Customer, Product } from '../types';
+import { Invoice, InvoiceItem, Party, Product } from '../types';
 import dataService from '../services/dataService';
 
 const CreateInvoice: React.FC = () => {
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [parties, setParties] = useState<Party[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [invoice, setInvoice] = useState<Partial<Invoice>>({
     invoiceNumber: '',
-    customerId: '',
-    customerName: '',
-    customerEmail: '',
-    customerPhone: '',
-    customerAddress: '',
+    partyId: '',
+    partyName: '',
+    partyEmail: '',
+    partyPhone: '',
+    partyAddress: '',
     date: new Date().toISOString().split('T')[0],
     dueDate: '',
     items: [],
@@ -44,11 +44,11 @@ const CreateInvoice: React.FC = () => {
 
   const loadInitialData = async () => {
     try {
-      const [customersData, productsData] = await Promise.all([
-        dataService.getCustomers(),
+      const [partiesData, productsData] = await Promise.all([
+        dataService.getParties(),
         dataService.getProducts()
       ]);
-      setCustomers(customersData);
+      setParties(partiesData);
       setProducts(productsData);
     } catch (error) {
       console.error('Error loading initial data:', error);
@@ -61,16 +61,16 @@ const CreateInvoice: React.FC = () => {
     setInvoice(prev => ({ ...prev, invoiceNumber }));
   };
 
-  const handleCustomerChange = (customerId: string) => {
-    const customer = customers.find(c => c.id === customerId);
-    if (customer) {
+  const handlePartyChange = (partyId: string) => {
+    const party = parties.find(p => p.id === partyId);
+    if (party) {
       setInvoice(prev => ({
         ...prev,
-        customerId: customer.id,
-        customerName: customer.name,
-        customerEmail: customer.email || '',
-        customerPhone: customer.phone || '',
-        customerAddress: customer.address || ''
+        partyId: party.id,
+        partyName: party.name,
+        partyEmail: party.email || '',
+        partyPhone: party.phone || '',
+        partyAddress: party.address || ''
       }));
     }
   };
@@ -278,36 +278,36 @@ const CreateInvoice: React.FC = () => {
           <div className="card">
             <div className="flex items-center space-x-2 mb-4">
               <User className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-medium text-gray-900">Customer Details</h3>
+              <h3 className="text-lg font-medium text-gray-900">Party Details</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Select Customer
+                  Select Party
                 </label>
                 <select
-                  value={invoice.customerId}
-                  onChange={(e) => handleCustomerChange(e.target.value)}
+                  value={invoice.partyId}
+                  onChange={(e) => handlePartyChange(e.target.value)}
                   className="input-field"
                 >
-                  <option value="">Select a customer</option>
-                  {customers.map(customer => (
-                    <option key={customer.id} value={customer.id}>
-                      {customer.name}
+                  <option value="">Select a party</option>
+                  {parties.map(party => (
+                    <option key={party.id} value={party.id}>
+                      {party.name}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Customer Name
+                  Party Name
                 </label>
                 <input
                   type="text"
-                  value={invoice.customerName}
-                  onChange={(e) => setInvoice(prev => ({ ...prev, customerName: e.target.value }))}
+                  value={invoice.partyName}
+                  onChange={(e) => setInvoice(prev => ({ ...prev, partyName: e.target.value }))}
                   className="input-field"
-                  placeholder="Enter customer name"
+                  placeholder="Enter party name"
                 />
               </div>
               <div>
@@ -316,10 +316,10 @@ const CreateInvoice: React.FC = () => {
                 </label>
                 <input
                   type="email"
-                  value={invoice.customerEmail}
-                  onChange={(e) => setInvoice(prev => ({ ...prev, customerEmail: e.target.value }))}
+                  value={invoice.partyEmail}
+                  onChange={(e) => setInvoice(prev => ({ ...prev, partyEmail: e.target.value }))}
                   className="input-field"
-                  placeholder="customer@example.com"
+                  placeholder="party@example.com"
                 />
               </div>
               <div>
@@ -328,8 +328,8 @@ const CreateInvoice: React.FC = () => {
                 </label>
                 <input
                   type="tel"
-                  value={invoice.customerPhone}
-                  onChange={(e) => setInvoice(prev => ({ ...prev, customerPhone: e.target.value }))}
+                  value={invoice.partyPhone}
+                  onChange={(e) => setInvoice(prev => ({ ...prev, partyPhone: e.target.value }))}
                   className="input-field"
                   placeholder="+91 9876543210"
                 />
@@ -339,11 +339,11 @@ const CreateInvoice: React.FC = () => {
                   Address
                 </label>
                 <textarea
-                  value={invoice.customerAddress}
-                  onChange={(e) => setInvoice(prev => ({ ...prev, customerAddress: e.target.value }))}
+                  value={invoice.partyAddress}
+                  onChange={(e) => setInvoice(prev => ({ ...prev, partyAddress: e.target.value }))}
                   className="input-field"
                   rows={2}
-                  placeholder="Customer address"
+                  placeholder="Party address"
                 />
               </div>
             </div>
