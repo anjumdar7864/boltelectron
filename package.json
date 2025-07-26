@@ -35,9 +35,9 @@
     }
   },
   "devDependencies": {
-    "electron": "^latest",
-    "electron-builder": "^latest",
-    "concurrently": "^latest",
-    "wait-on": "^latest"
+    "electron": "^29.3.0",
+    "electron-builder": "^24.13.1",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
   }
 }
