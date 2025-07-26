@@ -74,6 +74,8 @@ export interface Party {
   shippingAddress?: string;
   enableShippingAddress?: boolean;
   creditLimit?: number;
+  openingBalance?: number;
+  asOfDate?: string;
   outstandingAmount: number;
   totalPurchases: number;
   lastPurchaseDate?: string;

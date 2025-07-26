@@ -32,12 +32,17 @@ const AddPartyModal: React.FC<{
     billingAddress: '',
     shippingAddress: '',
     enableShippingAddress: false,
-    isActive: true
+    isActive: true,
+    creditLimit: undefined,
+    openingBalance: 0,
+    asOfDate: ''
   });
+  const [noCreditLimit, setNoCreditLimit] = useState(true);
 
   const handleSubmit = (saveAndNew = false) => {
     const newParty: Party = {
       ...formData,
+      creditLimit: noCreditLimit ? undefined : formData.creditLimit,
       id: Date.now().toString(),
       outstandingAmount: 0,
       totalPurchases: 0,
@@ -59,8 +64,12 @@ const AddPartyModal: React.FC<{
         billingAddress: '',
         shippingAddress: '',
         enableShippingAddress: false,
-        isActive: true
+        isActive: true,
+        creditLimit: undefined,
+        openingBalance: 0,
+        asOfDate: ''
       });
+      setNoCreditLimit(true);
     } else {
       onClose();
     }
@@ -232,17 +241,46 @@ const AddPartyModal: React.FC<{
 
           {activeTab === 'credit' && (
             <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Opening Balance</label>
+                  <input
+                    type="number"
+                    value={formData.openingBalance || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, openingBalance: parseFloat(e.target.value) || 0 }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Opening Balance"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">As of Date</label>
+                  <input
+                    type="date"
+                    value={formData.asOfDate || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, asOfDate: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Credit Limit
+                <label className="flex items-center text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={noCreditLimit}
+                    onChange={(e) => setNoCreditLimit(e.target.checked)}
+                    className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Credit Limit (No Limit)
                 </label>
-                <input
-                  type="number"
-                  value={formData.creditLimit || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, creditLimit: parseFloat(e.target.value) || 0 }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter credit limit"
-                />
+                {!noCreditLimit && (
+                  <input
+                    type="number"
+                    value={formData.creditLimit || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, creditLimit: parseFloat(e.target.value) || 0 }))}
+                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Credit Limit"
+                  />
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
