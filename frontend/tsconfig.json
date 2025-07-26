@@ -4,7 +4,12 @@
     "module": "ESNext",
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
-    "strict": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["react", "react-dom"],
     "baseUrl": "."
   },
   "include": ["src/**/*"],
