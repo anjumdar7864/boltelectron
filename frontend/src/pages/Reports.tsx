@@ -145,7 +145,7 @@ const Reports: React.FC = () => {
               },
               {
                 title: 'Active Customers',
-                value: dashboardData.totalCustomers.toLocaleString(),
+                value: dashboardData.totalParties.toLocaleString(),
                 change: '+15.3%',
                 changeType: 'positive' as const,
                 icon: Users,
