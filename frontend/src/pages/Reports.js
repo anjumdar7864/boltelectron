@@ -61,7 +61,7 @@ const Reports = () => {
                             },
                             {
                                 title: 'Active Customers',
-                                value: dashboardData.totalCustomers.toLocaleString(),
+                                value: dashboardData.totalParties.toLocaleString(),
                                 change: '+15.3%',
                                 changeType: 'positive',
                                 icon: Users,
