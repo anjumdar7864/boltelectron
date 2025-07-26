@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      `sidebar-link ${isActive ? 'active' : ''}`
+                      `sidebar-link group ${isActive ? 'active' : ''}`
                     }
                     onClick={() => onClose()}
                   >
