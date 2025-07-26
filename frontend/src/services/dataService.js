@@ -46,28 +46,38 @@ class DataService {
         storageService.setItem('products', filtered);
         await storageService.saveToElectron('products', filtered);
     }
-    // Customer methods
-    async getCustomers() {
-        const customers = storageService.getItem('customers') || [];
-        return customers;
+    // Party methods
+    async getParties() {
+        const parties = storageService.getItem('parties') || [];
+        return parties;
     }
-    async saveCustomer(customer) {
-        const customers = await this.getCustomers();
-        const existingIndex = customers.findIndex(cust => cust.id === customer.id);
+    async saveParty(party) {
+        const parties = await this.getParties();
+        const existingIndex = parties.findIndex(p => p.id === party.id);
         if (existingIndex >= 0) {
-            customers[existingIndex] = customer;
+            parties[existingIndex] = party;
         }
         else {
-            customers.push(customer);
+            parties.push(party);
         }
-        storageService.setItem('customers', customers);
-        await storageService.saveToElectron('customers', customers);
+        storageService.setItem('parties', parties);
+        await storageService.saveToElectron('parties', parties);
+    }
+    async deleteParty(id) {
+        const parties = await this.getParties();
+        const filtered = parties.filter(p => p.id !== id);
+        storageService.setItem('parties', filtered);
+        await storageService.saveToElectron('parties', filtered);
+    }
+    // Keep backward compatibility methods
+    async getCustomers() {
+        return this.getParties();
+    }
+    async saveCustomer(customer) {
+        return this.saveParty(customer);
     }
     async deleteCustomer(id) {
-        const customers = await this.getCustomers();
-        const filtered = customers.filter(cust => cust.id !== id);
-        storageService.setItem('customers', filtered);
-        await storageService.saveToElectron('customers', filtered);
+        return this.deleteParty(id);
     }
     // Business settings
     async getBusinessSettings() {
@@ -104,12 +114,12 @@ class DataService {
     // Dashboard data
     async getDashboardData() {
         const invoices = await this.getInvoices();
-        const customers = await this.getCustomers();
+        const parties = await this.getParties();
         const products = await this.getProducts();
         // Calculate totals
         const totalSales = invoices.reduce((sum, inv) => sum + inv.total, 0);
         const totalInvoices = invoices.length;
-        const totalCustomers = customers.length;
+        const totalParties = parties.length;
         const totalProducts = products.length;
         const outstandingAmount = invoices
             .filter(inv => inv.status !== 'paid')
@@ -156,7 +166,7 @@ class DataService {
         return {
             totalSales,
             totalInvoices,
-            totalCustomers,
+            totalParties,
             totalProducts,
             outstandingAmount,
             lowStockItems,
