@@ -1,11 +1,11 @@
 export interface Invoice {
   id: string;
   invoiceNumber: string;
-  customerId: string;
-  customerName: string;
-  customerEmail?: string;
-  customerPhone?: string;
-  customerAddress?: string;
+  partyId: string;
+  partyName: string;
+  partyEmail?: string;
+  partyPhone?: string;
+  partyAddress?: string;
   date: string;
   dueDate?: string;
   items: InvoiceItem[];
@@ -61,13 +61,18 @@ export interface Product {
   updatedAt: string;
 }
 
-export interface Customer {
+export interface Party {
   id: string;
   name: string;
   email?: string;
   phone?: string;
   address?: string;
   gstNumber?: string;
+  gstType?: 'unregistered' | 'consumer' | 'registered';
+  state?: string;
+  billingAddress?: string;
+  shippingAddress?: string;
+  enableShippingAddress?: boolean;
   creditLimit?: number;
   outstandingAmount: number;
   totalPurchases: number;
@@ -78,6 +83,8 @@ export interface Customer {
   updatedAt: string;
 }
 
+// Keep Customer as alias for backward compatibility
+export type Customer = Party;
 export interface BusinessSettings {
   id: string;
   businessName: string;
@@ -120,7 +127,7 @@ export interface SalesReport {
 export interface DashboardData {
   totalSales: number;
   totalInvoices: number;
-  totalCustomers: number;
+  totalParties: number;
   totalProducts: number;
   outstandingAmount: number;
   lowStockItems: number;

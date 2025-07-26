@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { path: '/invoices', label: 'Invoices', icon: FileText },
     { path: '/pos', label: 'Point of Sale', icon: CreditCard },
     { path: '/inventory', label: 'Inventory', icon: Package },
-    { path: '/customers', label: 'Customers', icon: Users },
+    { path: '/customers', label: 'Parties', icon: Users },
     { path: '/reports', label: 'Reports', icon: BarChart3 },
     { path: '/settings', label: 'Settings', icon: Settings },
   ];

@@ -76,8 +76,8 @@ const Dashboard: React.FC = () => {
       color: 'text-primary-600'
     },
     {
-      title: 'Total Customers',
-      value: dashboardData.totalCustomers.toLocaleString(),
+      title: 'Total Parties',
+      value: dashboardData.totalParties.toLocaleString(),
       change: '+15.3%',
       changeType: 'positive' as const,
       icon: Users,

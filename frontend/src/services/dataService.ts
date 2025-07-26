@@ -1,4 +1,4 @@
-import { Invoice, Product, Customer, BusinessSettings, DashboardData } from '../types';
+import { Invoice, Product, Party, Customer, BusinessSettings, DashboardData } from '../types';
 import storageService from './storage';
 
 class DataService {
@@ -56,31 +56,44 @@ class DataService {
     await storageService.saveToElectron('products', filtered);
   }
 
-  // Customer methods
+  // Party methods
+  async getParties(): Promise<Party[]> {
+    const parties = storageService.getItem<Party[]>('parties') || [];
+    return parties;
+  }
+
+  async saveParty(party: Party): Promise<void> {
+    const parties = await this.getParties();
+    const existingIndex = parties.findIndex(p => p.id === party.id);
+    
+    if (existingIndex >= 0) {
+      parties[existingIndex] = party;
+    } else {
+      parties.push(party);
+    }
+    
+    storageService.setItem('parties', parties);
+    await storageService.saveToElectron('parties', parties);
+  }
+
+  async deleteParty(id: string): Promise<void> {
+    const parties = await this.getParties();
+    const filtered = parties.filter(p => p.id !== id);
+    storageService.setItem('parties', filtered);
+    await storageService.saveToElectron('parties', filtered);
+  }
+
+  // Keep backward compatibility methods
   async getCustomers(): Promise<Customer[]> {
-    const customers = storageService.getItem<Customer[]>('customers') || [];
-    return customers;
+    return this.getParties();
   }
 
   async saveCustomer(customer: Customer): Promise<void> {
-    const customers = await this.getCustomers();
-    const existingIndex = customers.findIndex(cust => cust.id === customer.id);
-    
-    if (existingIndex >= 0) {
-      customers[existingIndex] = customer;
-    } else {
-      customers.push(customer);
-    }
-    
-    storageService.setItem('customers', customers);
-    await storageService.saveToElectron('customers', customers);
+    return this.saveParty(customer);
   }
 
   async deleteCustomer(id: string): Promise<void> {
-    const customers = await this.getCustomers();
-    const filtered = customers.filter(cust => cust.id !== id);
-    storageService.setItem('customers', filtered);
-    await storageService.saveToElectron('customers', filtered);
+    return this.deleteParty(id);
   }
 
   // Business settings
@@ -123,13 +136,13 @@ class DataService {
   // Dashboard data
   async getDashboardData(): Promise<DashboardData> {
     const invoices = await this.getInvoices();
-    const customers = await this.getCustomers();
+    const parties = await this.getParties();
     const products = await this.getProducts();
 
     // Calculate totals
     const totalSales = invoices.reduce((sum, inv) => sum + inv.total, 0);
     const totalInvoices = invoices.length;
-    const totalCustomers = customers.length;
+    const totalParties = parties.length;
     const totalProducts = products.length;
     const outstandingAmount = invoices
       .filter(inv => inv.status !== 'paid')
@@ -184,7 +197,7 @@ class DataService {
     return {
       totalSales,
       totalInvoices,
-      totalCustomers,
+      totalParties,
       totalProducts,
       outstandingAmount,
       lowStockItems,
