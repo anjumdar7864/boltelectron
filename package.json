@@ -1,0 +1,43 @@
+{
+  "name": "vyapar-saas-electron",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Complete SaaS Billing and Invoicing System",
+  "main": "public/electron.js",
+  "homepage": "./",
+  "scripts": {
+    "dev": "concurrently \"npm run frontend:dev\" \"wait-on http://localhost:5173 && npm run electron:dev\"",
+    "frontend:dev": "cd frontend && npm run dev",
+    "electron:dev": "electron .",
+    "build": "npm run frontend:build && npm run electron:build",
+    "frontend:build": "cd frontend && npm run build",
+    "electron:build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.vyapar.saas",
+    "productName": "Vyapar SaaS",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "public/**/*",
+      "frontend/dist/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.business"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "devDependencies": {
+    "electron": "^latest",
+    "electron-builder": "^latest",
+    "concurrently": "^latest",
+    "wait-on": "^latest"
+  }
+}
