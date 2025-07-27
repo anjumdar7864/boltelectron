@@ -139,6 +139,22 @@ class DataService {
     const parties = await this.getParties();
     const products = await this.getProducts();
 
+    // Update party totals based on invoices
+    for (const party of parties) {
+      const partyInvoices = invoices.filter(inv => inv.partyId === party.id);
+      party.totalPurchases = partyInvoices.reduce((sum, inv) => sum + inv.total, 0);
+      party.outstandingAmount = partyInvoices
+        .filter(inv => inv.status !== 'paid')
+        .reduce((sum, inv) => sum + inv.total, 0);
+      
+      if (partyInvoices.length > 0) {
+        const latestInvoice = partyInvoices.sort((a, b) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        )[0];
+        party.lastPurchaseDate = latestInvoice.date;
+      }
+    }
+
     // Calculate totals
     const totalSales = invoices.reduce((sum, inv) => sum + inv.total, 0);
     const totalInvoices = invoices.length;
