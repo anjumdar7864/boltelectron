@@ -172,7 +172,7 @@ class DataService {
     // Recent invoices (last 10)
     const recentInvoices = invoices
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 10);
+      .slice(0, 10)
       .map(invoice => ({
         ...invoice,
         customerName: invoice.partyName // For backward compatibility
