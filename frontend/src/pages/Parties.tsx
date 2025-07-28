@@ -97,7 +97,7 @@ const AddPartyModal: React.FC<{
         <div className="p-6">
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="md:col-span-2">
+            <div className="md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Party Name *
               </label>
@@ -106,7 +106,7 @@ const AddPartyModal: React.FC<{
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter party name"
+                placeholder="Party Name"
               />
             </div>
             <div>
@@ -612,95 +612,75 @@ const Parties: React.FC = () => {
         </div>
       </div>
 
-      {/* Parties Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredParties.map((party) => (
-          <div
-            key={party.id}
-            onClick={() => handlePartyClick(party)}
-            className="card cursor-pointer hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-lg font-bold text-primary-700">
-                    {party.name.charAt(0).toUpperCase()}
-                  </span>
+      {/* Parties List - Exact same as video */}
+      <div className="bg-white rounded-lg shadow-sm">
+        <div className="p-6">
+          <div className="space-y-4">
+            {filteredParties.map((party) => (
+              <div
+                key={party.id}
+                onClick={() => handlePartyClick(party)}
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold text-blue-700">
+                      {party.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-lg">{party.name}</h3>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      {party.phone && (
+                        <div className="flex items-center">
+                          <Phone className="w-4 h-4 mr-1" />
+                          {party.phone}
+                        </div>
+                      )}
+                      {party.email && (
+                        <div className="flex items-center">
+                          <Mail className="w-4 h-4 mr-1" />
+                          {party.email}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 text-lg">{party.name}</h3>
-                  {party.gstNumber && (
-                    <p className="text-sm text-gray-500">GST: {party.gstNumber}</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center space-x-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Handle edit
-                  }}
-                  className="p-1 text-gray-400 hover:text-gray-600"
-                >
-                  <Edit className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteParty(party.id);
-                  }}
-                  className="p-1 text-gray-400 hover:text-red-600"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-4 space-y-2">
-              {party.phone && (
-                <div className="flex items-center text-sm text-gray-600">
-                  <Phone className="w-4 h-4 mr-2" />
-                  {party.phone}
-                </div>
-              )}
-              {party.email && (
-                <div className="flex items-center text-sm text-gray-600">
-                  <Mail className="w-4 h-4 mr-2" />
-                  {party.email}
-                </div>
-              )}
-              {party.billingAddress && (
-                <div className="flex items-center text-sm text-gray-600">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  {party.billingAddress.substring(0, 40)}...
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-xs text-gray-500">Total Purchases</p>
-                  <p className="font-semibold text-gray-900">₹{party.totalPurchases.toLocaleString()}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Outstanding</p>
-                  <p className="font-semibold text-gray-900">₹{party.outstandingAmount.toLocaleString()}</p>
+                
+                <div className="flex items-center space-x-6">
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Total Sales</p>
+                    <p className="font-semibold text-gray-900">₹{party.totalPurchases.toLocaleString()}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Outstanding</p>
+                    <p className="font-semibold text-gray-900">₹{party.outstandingAmount.toLocaleString()}</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Handle edit
+                      }}
+                      className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteParty(party.id);
+                      }}
+                      className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="mt-3">
-              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                party.isActive 
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-gray-100 text-gray-800'
-              }`}>
-                {party.isActive ? 'Active' : 'Inactive'}
-              </span>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       {filteredParties.length === 0 && (
