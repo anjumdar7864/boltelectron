@@ -5,7 +5,11 @@ This project is an Electron based desktop application that bundles a React front
 ## Development
 
 1. Install Node.js (v18 or later recommended).
-2. Run `npm install` in the project root to install both Electron and front-end dependencies.
+2. Install dependencies:
+   ```bash
+   npm install
+   cd frontend && npm install
+   ```
 3. Start the app in development mode:
    ```bash
    npm run dev
