@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Invoices from './pages/Invoices';
 import CreateInvoice from './pages/CreateInvoice';
 import Inventory from './pages/Inventory';
-import Customers from './pages/Customers';
+import Parties from './pages/Parties';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import POS from './pages/POS';
@@ -37,7 +37,8 @@ function App() {
             <Route path="invoices" element={<Invoices />} />
             <Route path="invoices/create" element={<CreateInvoice />} />
             <Route path="inventory" element={<Inventory />} />
-            <Route path="customers" element={<Customers />} />
+            <Route path="customers" element={<Parties />} />
+            <Route path="parties" element={<Parties />} />
             <Route path="reports" element={<Reports />} />
             <Route path="pos" element={<POS />} />
             <Route path="settings" element={<Settings />} />

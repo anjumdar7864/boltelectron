@@ -155,6 +155,10 @@ class DataService {
       }
     }
 
+    // Save updated parties back to storage
+    for (const party of parties) {
+      await this.saveParty(party);
+    }
     // Calculate totals
     const totalSales = invoices.reduce((sum, inv) => sum + inv.total, 0);
     const totalInvoices = invoices.length;
@@ -169,6 +173,10 @@ class DataService {
     const recentInvoices = invoices
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 10);
+      .map(invoice => ({
+        ...invoice,
+        customerName: invoice.partyName // For backward compatibility
+      }));
 
     // Sales chart data (last 30 days)
     const thirtyDaysAgo = new Date();
