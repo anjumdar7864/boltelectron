@@ -262,37 +262,33 @@ const AddPartyModal: React.FC<{
                   />
                 </div>
               </div>
-              <div>
-                <label className="flex items-center text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={noCreditLimit}
-                    onChange={(e) => setNoCreditLimit(e.target.checked)}
-                    className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  Credit Limit (No Limit)
-                </label>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Credit Limit
+                  </label>
+                  <div className="flex items-center">
+                    <span className="mr-2 text-sm text-gray-700">No Limit</span>
+                    <button
+                      type="button"
+                      onClick={() => setNoCreditLimit(!noCreditLimit)}
+                      className={`${noCreditLimit ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+                    >
+                      <span
+                        className={`${noCreditLimit ? 'translate-x-6' : 'translate-x-1'} inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                      />
+                    </button>
+                  </div>
+                </div>
                 {!noCreditLimit && (
                   <input
                     type="number"
                     value={formData.creditLimit || ''}
                     onChange={(e) => setFormData(prev => ({ ...prev, creditLimit: parseFloat(e.target.value) || 0 }))}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Credit Limit"
                   />
                 )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  GST Number
-                </label>
-                <input
-                  type="text"
-                  value={formData.gstNumber}
-                  onChange={(e) => setFormData(prev => ({ ...prev, gstNumber: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="GST Number (optional)"
-                />
               </div>
             </div>
           )}
