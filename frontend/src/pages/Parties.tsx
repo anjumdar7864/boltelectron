@@ -15,7 +15,9 @@ import {
   ArrowLeft,
   FileText,
   Calendar,
-  DollarSign
+  DollarSign,
+  ChevronDown,
+  MoreHorizontal
 } from 'lucide-react';
 import { Party, Invoice } from '../types';
 import dataService from '../services/dataService';
@@ -297,7 +299,7 @@ const AddPartyModal: React.FC<{
   );
 };
 
-const PartyTransactions: React.FC<{
+const PartyDetails: React.FC<{
   party: Party;
   onBack: () => void;
 }> = ({ party, onBack }) => {
@@ -320,19 +322,6 @@ const PartyTransactions: React.FC<{
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'bg-green-100 text-green-800';
-      case 'sent':
-        return 'bg-blue-100 text-blue-800';
-      case 'overdue':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -342,156 +331,137 @@ const PartyTransactions: React.FC<{
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="bg-white min-h-screen">
       {/* Header */}
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={onBack}
-          className="p-2 hover:bg-gray-100 rounded-lg"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{party.name}</h1>
-          <p className="text-gray-600">All transactions for this party</p>
-        </div>
-      </div>
-
-      {/* Party Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Purchases</p>
-              <p className="text-2xl font-bold text-gray-900">₹{party.totalPurchases.toLocaleString()}</p>
-            </div>
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-primary-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Outstanding</p>
-              <p className="text-2xl font-bold text-gray-900">₹{party.outstandingAmount.toLocaleString()}</p>
-            </div>
-            <div className="w-12 h-12 bg-warning-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6 text-warning-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Invoices</p>
-              <p className="text-2xl font-bold text-gray-900">{transactions.length}</p>
-            </div>
-            <div className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6 text-secondary-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Last Purchase</p>
-              <p className="text-lg font-bold text-gray-900">
-                {party.lastPurchaseDate 
-                  ? new Date(party.lastPurchaseDate).toLocaleDateString()
-                  : 'Never'
-                }
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center">
-              <Calendar className="w-6 h-6 text-accent-600" />
-            </div>
+      <div className="border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={onBack}
+            className="p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Parties</h1>
           </div>
         </div>
       </div>
 
-      {/* Transactions List */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Transaction History</h3>
-          <div className="flex items-center space-x-2">
-            <button className="btn-outline inline-flex items-center space-x-2">
-              <Download className="w-4 h-4" />
-              <span>Export</span>
+      {/* Party Info Card */}
+      <div className="p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                {party.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">{party.name}</h2>
+                <div className="grid grid-cols-3 gap-8 mt-4 text-sm">
+                  <div>
+                    <span className="text-gray-500">Phone Number</span>
+                    <p className="font-medium">{party.phone || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Email</span>
+                    <p className="font-medium">{party.email || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Credit Limit</span>
+                    <p className="font-medium">₹ {party.creditLimit?.toLocaleString() || '0'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <Edit className="w-4 h-4 text-gray-500" />
             </button>
           </div>
         </div>
 
-        {transactions.length === 0 ? (
-          <div className="text-center py-12">
-            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
-            <p className="text-gray-500">This party hasn't made any purchases yet.</p>
+        {/* Transactions Section */}
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">Transactions</h3>
           </div>
-        ) : (
+          
+          {/* Transaction Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Invoice #
+                    <div className="flex items-center space-x-1">
+                      <span>Type</span>
+                      <Filter className="w-3 h-3" />
+                    </div>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
+                    <div className="flex items-center space-x-1">
+                      <span>Number</span>
+                      <Filter className="w-3 h-3" />
+                    </div>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Due Date
+                    <div className="flex items-center space-x-1">
+                      <span>Date</span>
+                      <ChevronDown className="w-3 h-3" />
+                    </div>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
+                    <div className="flex items-center space-x-1">
+                      <span>Total</span>
+                      <ChevronDown className="w-3 h-3" />
+                    </div>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    <div className="flex items-center space-x-1">
+                      <span>Balance</span>
+                      <ChevronDown className="w-3 h-3" />
+                    </div>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    <MoreHorizontal className="w-4 h-4" />
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {transactions.map((transaction) => (
-                  <tr key={transaction.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {transaction.invoiceNumber}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(transaction.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {transaction.dueDate ? new Date(transaction.dueDate).toLocaleDateString() : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ₹{transaction.total.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
-                        {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center space-x-2">
-                        <button className="text-primary-600 hover:text-primary-900">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-gray-600 hover:text-gray-900">
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
+                {transactions.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                      No transactions found for this party
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  transactions.map((transaction) => (
+                    <tr key={transaction.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Sale
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {transaction.invoiceNumber}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(transaction.date).toLocaleDateString('en-GB')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ₹ {transaction.total.toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ₹ {transaction.status === 'paid' ? '0.00' : transaction.total.toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                        <button className="p-1 hover:bg-gray-100 rounded">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
@@ -555,7 +525,7 @@ const Parties: React.FC = () => {
   });
 
   if (selectedParty) {
-    return <PartyTransactions party={selectedParty} onBack={handleBackToParties} />;
+    return <PartyDetails party={selectedParty} onBack={handleBackToParties} />;
   }
 
   if (loading) {
@@ -567,140 +537,110 @@ const Parties: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="bg-white min-h-screen">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Parties</h1>
-          <p className="text-gray-600 mt-1">Manage your business parties</p>
-        </div>
-        <div className="mt-4 sm:mt-0">
-          <button 
-            onClick={() => setShowAddModal(true)}
-            className="btn-primary inline-flex items-center space-x-2"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Party</span>
-          </button>
+      <div className="border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-xl font-semibold text-gray-900 flex items-center">
+              Parties
+              <ChevronDown className="w-4 h-4 ml-1" />
+            </h1>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button className="px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 font-medium">
+              + Add Sale
+            </button>
+            <button className="px-4 py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 font-medium">
+              + Add Purchase
+            </button>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium flex items-center space-x-2"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Party</span>
+            </button>
+            <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <Settings className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Search */}
-      <div className="card">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search parties..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 w-80"
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button className="btn-outline inline-flex items-center space-x-2">
-              <Filter className="w-4 h-4" />
-              <span>Filter</span>
-            </button>
-            <button className="btn-outline inline-flex items-center space-x-2">
-              <Download className="w-4 h-4" />
-              <span>Export</span>
-            </button>
-          </div>
+      <div className="px-6 py-4 border-b border-gray-200">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search Party Name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
       </div>
 
-      {/* Parties List - Exact same as video */}
-      <div className="bg-white rounded-lg shadow-sm">
-        <div className="p-6">
-          <div className="space-y-4">
-            {filteredParties.map((party) => (
-              <div
-                key={party.id}
-                onClick={() => handlePartyClick(party)}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-lg font-bold text-blue-700">
-                      {party.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">{party.name}</h3>
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      {party.phone && (
-                        <div className="flex items-center">
-                          <Phone className="w-4 h-4 mr-1" />
-                          {party.phone}
-                        </div>
-                      )}
-                      {party.email && (
-                        <div className="flex items-center">
-                          <Mail className="w-4 h-4 mr-1" />
-                          {party.email}
-                        </div>
-                      )}
+      {/* Parties Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center space-x-1">
+                  <span>Party Name</span>
+                  <ChevronDown className="w-3 h-3" />
+                </div>
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Amount
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {filteredParties.length === 0 ? (
+              <tr>
+                <td colSpan={2} className="px-6 py-12 text-center">
+                  <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No parties found</h3>
+                  <p className="text-gray-500 mb-6">
+                    {searchTerm 
+                      ? 'Try adjusting your search criteria.'
+                      : 'Get started by adding your first party.'
+                    }
+                  </p>
+                  <button 
+                    onClick={() => setShowAddModal(true)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+                  >
+                    Add Your First Party
+                  </button>
+                </td>
+              </tr>
+            ) : (
+              filteredParties.map((party) => (
+                <tr 
+                  key={party.id} 
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => handlePartyClick(party)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-blue-600 hover:text-blue-800">
+                      {party.name}
                     </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-6">
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Total Sales</p>
-                    <p className="font-semibold text-gray-900">₹{party.totalPurchases.toLocaleString()}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Outstanding</p>
-                    <p className="font-semibold text-gray-900">₹{party.outstandingAmount.toLocaleString()}</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Handle edit
-                      }}
-                      className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteParty(party.id);
-                      }}
-                      className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-teal-600 font-medium">
+                      {party.totalPurchases.toFixed(2)}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {filteredParties.length === 0 && (
-        <div className="text-center py-12">
-          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No parties found</h3>
-          <p className="text-gray-500 mb-6">
-            {searchTerm 
-              ? 'Try adjusting your search criteria.'
-              : 'Get started by adding your first party.'
-            }
-          </p>
-          <button 
-            onClick={() => setShowAddModal(true)}
-            className="btn-primary"
-          >
-            Add Your First Party
-          </button>
-        </div>
-      )}
 
       {/* Add Party Modal */}
       <AddPartyModal
